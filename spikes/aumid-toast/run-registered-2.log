@@ -1,0 +1,6 @@
+registered FastCord.Client -> FastCord, icon C:\Users\Desenvolvimento\Desktop\FastCord\spikes\aumid-toast\icon.png
+NotificationSetting for FastCord.Client: NotificationSetting(0) (0=Enabled 1=DisabledForApplication 2=DisabledForUser 3=DisabledByGroupPolicy 4=DisabledByManifest)
+show() -> Ok(())
+waiting 45s for activation/dismissal events...
+event: DISMISSED reason=UserCanceled
+action-center history for FastCord.Client: 1 toast(s)

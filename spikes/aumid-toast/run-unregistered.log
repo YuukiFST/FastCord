@@ -1,0 +1,5 @@
+running with NO registry entry for FastCord.Client
+NotificationSetting for FastCord.Client: NotificationSetting(0) (0=Enabled 1=DisabledForApplication 2=DisabledForUser 3=DisabledByGroupPolicy 4=DisabledByManifest)
+show() -> Ok(())
+waiting 45s for activation/dismissal events...
+action-center history for FastCord.Client: 2 toast(s)
