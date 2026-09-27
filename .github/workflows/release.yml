@@ -1,0 +1,25 @@
+name: release
+on:
+  push:
+    tags: ["v*"]
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
+      - name: check tag matches crate version
+        shell: pwsh
+        run: |
+          $v = (Select-String -Path crates/fastcord-app/Cargo.toml -Pattern '^version = "([^"]+)"').Matches.Groups[1].Value
+          if ("v$v" -ne "${{ github.ref_name }}") { throw "tag ${{ github.ref_name }} != crate version v$v" }
+      - run: cargo build --release
+      - shell: pwsh
+        run: |
+          $v = (Select-String -Path crates/fastcord-app/Cargo.toml -Pattern '^version = "([^"]+)"').Matches.Groups[1].Value
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item target/release/fastcord.exe "dist/FastCord-$v-windows-x64.exe"
+          (Get-FileHash "dist/FastCord-$v-windows-x64.exe" -Algorithm SHA256).Hash | Out-File dist/SHA256SUMS
+      - run: gh release create "${{ github.ref_name }}" "dist/FastCord-*-windows-x64.exe" dist/SHA256SUMS --title "${{ github.ref_name }}" --notes-file CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

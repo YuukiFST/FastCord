@@ -1,0 +1,9 @@
+{
+  "merged_presences": {
+    "friends": [
+      { "user_id": "100000000000000001" },
+      { "user_id": "100000000000000002" }
+    ]
+  },
+  "voice_states": []
+}

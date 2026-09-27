@@ -1,0 +1,9 @@
+[package]
+name = "aumid-toast-spike"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri-winrt-notification = "0.8.1"
+windows-registry = "0.6"
+windows = { version = "0.62", features = ["UI_Notifications", "Foundation_Collections"] }

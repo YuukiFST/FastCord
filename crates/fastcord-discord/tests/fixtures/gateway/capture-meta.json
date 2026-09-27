@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "replaced_by_issue": 45,
+  "gateway_url": "wss://gateway.discord.gg/?encoding=json&v=9&compress=zlib-stream",
+  "capabilities": 1734653,
+  "client_build_number": 617136,
+  "note": "Hand-written placeholder shaped like the scrubbed capture. Replace with the real capture from issue #45."
+}

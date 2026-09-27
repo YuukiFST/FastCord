@@ -1,0 +1,4 @@
+target/
+dist/
+*.log
+docs/research/.issue8-comment.md

@@ -1,0 +1,33 @@
+{
+  "v": 9,
+  "user": { "id": "100000000000000001", "username": "synthetic_user_1" },
+  "users": [
+    { "id": "100000000000000001", "username": "synthetic_user_1" },
+    { "id": "100000000000000002", "username": "synthetic_user_2" }
+  ],
+  "guilds": [
+    {
+      "id": "100000000000000010",
+      "name": "synthetic_guild_1",
+      "merged_members": [
+        { "user_id": "100000000000000001", "nick": null }
+      ]
+    }
+  ],
+  "private_channels": [
+    { "id": "100000000000000020", "recipient_ids": ["100000000000000002"] }
+  ],
+  "read_state": {
+    "version": 1,
+    "partial": false,
+    "entries": [
+      {
+        "channel_id": "100000000000000020",
+        "last_message_id": "100000000000000030"
+      }
+    ]
+  },
+  "user_guild_settings": [
+    { "guild_id": "100000000000000010", "muted": false }
+  ]
+}
