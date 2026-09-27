@@ -82,7 +82,10 @@ mod tests {
         // First segment is base64url("123456789012345678").
         let good = "MTIzNDU2Nzg5MDEyMzQ1Njc4.c2Vnb25kLXNlZ21lbnQtd2hpY2gtaXMtbG9uZy1lbm91Z2g.dGhpcmQtc2VnbWVudC13aGljaC1pcy1sb25nZXItc3RpbGw";
         assert_eq!(shape_of(good), Ok(()));
-        assert_eq!(shape_of("mfa.abcdefghijklmnopqrstuvwxyz0123456789ABCD"), Ok(()));
+        assert_eq!(
+            shape_of("mfa.abcdefghijklmnopqrstuvwxyz0123456789ABCD"),
+            Ok(())
+        );
     }
 
     #[test]
@@ -95,9 +98,16 @@ mod tests {
     fn rejects_prefixes_whitespace_and_malformed() {
         assert_eq!(shape_of(""), Err(TokenShapeError::Empty));
         assert_eq!(shape_of("Bot abc.def.ghi"), Err(TokenShapeError::Prefixed));
-        assert_eq!(shape_of("Bearer abc.def.ghi"), Err(TokenShapeError::Prefixed));
-        assert_eq!(shape_of("MTIz.proxy space"), Err(TokenShapeError::Whitespace));
-        assert_eq!(shape_of("not a token"), Err(TokenShapeError::SegmentCount));
+        assert_eq!(
+            shape_of("Bearer abc.def.ghi"),
+            Err(TokenShapeError::Prefixed)
+        );
+        assert_eq!(
+            shape_of("MTIz.proxy space"),
+            Err(TokenShapeError::Whitespace)
+        );
+        assert_eq!(shape_of("not a token"), Err(TokenShapeError::Whitespace));
+        assert_eq!(shape_of("only.two"), Err(TokenShapeError::SegmentCount));
         assert_eq!(shape_of("mfa.short"), Err(TokenShapeError::MfaTooShort));
         // "aGVsbG8" decodes to "hello", not digits.
         assert_eq!(

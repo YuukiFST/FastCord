@@ -38,10 +38,14 @@ impl FakeGateway {
     pub fn new(script: Vec<FakeStep>) -> Self {
         Self { script, pos: 0 }
     }
+}
+
+impl Iterator for FakeGateway {
+    type Item = TransportEvent;
 
     /// Returns the next decoded event, or `None` when the script ends.
     /// Panics on malformed script frames: a broken script is a test bug.
-    pub fn next(&mut self) -> Option<TransportEvent> {
+    fn next(&mut self) -> Option<TransportEvent> {
         loop {
             let step = self.script.get(self.pos)?;
             self.pos += 1;
@@ -75,9 +79,7 @@ mod tests {
             FakeStep::Frame(r#"{"op":10,"d":{"heartbeat_interval":41250}}"#),
             FakeStep::Frame(r#"{"op":11,"d":null}"#),
             FakeStep::Frame(r#"{"op":0,"s":1,"t":"READY","d":{}}"#),
-            FakeStep::Frame(
-                r#"{"op":0,"s":2,"t":"READY_SUPPLEMENTAL","d":{"friends":[]}}"#,
-            ),
+            FakeStep::Frame(r#"{"op":0,"s":2,"t":"READY_SUPPLEMENTAL","d":{"friends":[]}}"#),
             FakeStep::Close(None),
         ]);
         assert_eq!(gw.next(), Some(TransportEvent::Hello(41250)));

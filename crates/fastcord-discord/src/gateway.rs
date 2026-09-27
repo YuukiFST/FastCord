@@ -39,7 +39,7 @@ macro_rules! event_kinds {
         /// Dispatch events handled in v1 (#17). Anything else is [`GatewayEvent::Unknown`].
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
         pub enum EventKind {
-            $($variant,)*
+            $(#[doc = concat!("`", $name, "` dispatch event.")] $variant,)*
         }
 
         impl EventKind {
@@ -342,10 +342,7 @@ mod tests {
 
     #[test]
     fn unknown_event_name_is_never_an_error() {
-        let frame = decode_frame(
-            r#"{"op":0,"s":9,"t":"SOME_FUTURE_EVENT","d":{"x":1}}"#,
-        )
-        .unwrap();
+        let frame = decode_frame(r#"{"op":0,"s":9,"t":"SOME_FUTURE_EVENT","d":{"x":1}}"#).unwrap();
         match classify(frame) {
             GatewayEvent::Unknown { op, t } => {
                 assert_eq!(op, 0);
@@ -368,10 +365,7 @@ mod tests {
     fn backoff_doubles_caps_and_resets() {
         let mut b = Backoff::new();
         let seq: Vec<u64> = (0..8).map(|i| b.next_delay_ms(i * 1_000, 0.5)).collect();
-        assert_eq!(
-            seq,
-            [1000, 2000, 4000, 8000, 16000, 32000, 60000, 60000]
-        );
+        assert_eq!(seq, [1000, 2000, 4000, 8000, 16000, 32000, 60000, 60000]);
         // Stable for over a minute: back to 1 s.
         assert_eq!(b.next_delay_ms(8_000 + 61_000, 0.5), 1000);
     }

@@ -13,9 +13,10 @@ fn raw(value: &serde_json::Value) -> Box<serde_json::value::RawValue> {
 
 #[test]
 fn joins_users_members_and_dm_recipients() {
-    let ready: serde_json::Value =
-        serde_json::from_str(&std::fs::read_to_string("tests/fixtures/gateway/ready.json").unwrap())
-            .unwrap();
+    let ready: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string("tests/fixtures/gateway/ready.json").unwrap(),
+    )
+    .unwrap();
     let supplemental: serde_json::Value = serde_json::from_str(
         &std::fs::read_to_string("tests/fixtures/gateway/ready_supplemental.json").unwrap(),
     )
@@ -32,10 +33,10 @@ fn joins_users_members_and_dm_recipients() {
 
 #[test]
 fn unknown_member_user_is_an_error() {
-    let mut ready: serde_json::Value =
-        serde_json::from_str(&std::fs::read_to_string("tests/fixtures/gateway/ready.json").unwrap())
-            .unwrap();
-    ready["guilds"][0]["merged_members"][0]["user_id"] =
-        serde_json::json!("100000000000000099");
+    let mut ready: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string("tests/fixtures/gateway/ready.json").unwrap(),
+    )
+    .unwrap();
+    ready["guilds"][0]["merged_members"][0]["user_id"] = serde_json::json!("100000000000000099");
     assert!(join_ready(&raw(&ready), None).is_err());
 }

@@ -139,10 +139,16 @@ struct WirePresence {
     user_id: Snowflake,
 }
 
-#[derive(Debug, Deserialize)]
-struct WireSupplemental {
+#[derive(Debug, Deserialize, Default)]
+struct WireFriends {
     #[serde(default)]
     friends: Vec<WirePresence>,
+}
+
+#[derive(Debug, Deserialize, Default)]
+struct WireSupplemental {
+    #[serde(default)]
+    merged_presences: WireFriends,
 }
 
 fn parse<T>(raw: &RawValue) -> Result<T, ReadyError>
@@ -192,15 +198,16 @@ pub fn join_ready(
     }
 
     if let Some(state) = wire.read_state {
-        snap.read_state.extend(state.entries.into_iter().map(|e| ReadEntry {
-            channel_id: e.channel_id,
-            last_message_id: e.last_message_id,
-        }));
+        snap.read_state
+            .extend(state.entries.into_iter().map(|e| ReadEntry {
+                channel_id: e.channel_id,
+                last_message_id: e.last_message_id,
+            }));
     }
 
     if let Some(raw) = supplemental {
-        let friends: WireSupplemental = parse(raw)?;
-        for presence in friends.friends {
+        let outer: WireSupplemental = parse(raw)?;
+        for presence in outer.merged_presences.friends {
             if !snap.users.contains_key(&presence.user_id) {
                 return Err(ReadyError::UnknownUser(presence.user_id));
             }
